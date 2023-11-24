@@ -19,7 +19,7 @@ function ReclamoComponente(){
 
   const [unidad, setUnidad] = useState({piso:'', numero:'', codigoEdificio:''})
   //ver lo de imagenes
-  const [reclamo, setReclamo] = useState({documento:usuario.documento, codigoEdificio:'', ubicacion:'', descripcion:'', unidad:unidad, estado:'nuevo'});
+  const [reclamo, setReclamo] = useState({documento:usuario.documento, codigoEdificio:unidad.codigoEdificio, ubicacion:'', descripcion:'', unidad:unidad, estado:'nuevo'});
 
 
 
@@ -27,15 +27,15 @@ function ReclamoComponente(){
     const nuevoValor = e.target.value;
   
     // Convierte codigoEdificio a un número antes de actualizar el estado
-    const valorReclamoUnidad = e.target.name === "codigoEdificio" ? parseInt(nuevoValor, 10) : nuevoValor;
-    console.log(valorReclamoUnidad)
-    setUnidad((prevUnidad) => ({ ...prevUnidad, [e.target.name]: valorReclamoUnidad }));
+    //const valorReclamoUnidad = e.target.name === "codigoEdificio" ? parseInt(nuevoValor, 10) : nuevoValor;
+    //console.log(valorReclamoUnidad)
+    setUnidad((prevUnidad) => ({ ...prevUnidad, [e.target.name]: nuevoValor }));
   
     // Actualiza el objeto reclamo con el estado más reciente de la unidad (teng que tener la unidad en reclamo y el codigoEdificio)
     setReclamo((prevReclamo) => ({
       ...prevReclamo,
-      unidad: { ...prevReclamo.unidad, [e.target.name]: valorReclamoUnidad },
-      codigoEdificio: valorReclamoUnidad // Asigna el valor también a codigoEdificio del reclamo
+      unidad: { ...prevReclamo.unidad, [e.target.name]: nuevoValor },
+      codigoEdificio: nuevoValor // Asigna el valor también a codigoEdificio del reclamo
     })); 
   };
 
