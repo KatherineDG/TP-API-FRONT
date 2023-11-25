@@ -27,3 +27,11 @@
     background-color: white;
     border:none;
 }
+
+.btn-cancelar{
+    position: absolute;
+    right: 42%;
+    top: 20%;
+    background-color: white;
+    border:none;
+}

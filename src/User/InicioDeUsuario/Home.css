@@ -19,23 +19,23 @@ body {
     border-radius: 20px;
 }
 
-.container {
+.container-reclamar {
     max-width: 600px;
     margin: 80px auto;
     display: flex;
     justify-content: space-around;
 }
-.text-button-container {
+.container-botones-reclamar {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
 }
-.text {
+.text-reclamar {
     font-size: 18px;
     margin-bottom: 10px;
 }
-.button {
+.button-reclamar {
     margin-top: 15px;
     padding: 10px 20px;
     font-size: 16px;

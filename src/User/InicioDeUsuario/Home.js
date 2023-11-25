@@ -39,15 +39,15 @@ function HomeComponente(){
                 </p>
 
 
-                <div className="container">
-                    <div className="text-button-container">
-                        <div className="text">Reportar desperfecto en una unidad en particular</div>
-                        <button id="button1" className="button" onClick={ReclamarUnidad}>Reclamar</button>
+                <div className="container-reclamar">
+                    <div className="container-botones-reclamar">
+                        <div className="text-reclamar">Reportar desperfecto en una unidad en particular</div>
+                        <button className="button-reclamar" onClick={ReclamarUnidad}>Reclamar</button>
                     </div>
 
                     <div className="text-button-container">
-                            <div className="text">Reportar desperfecto en una parte comunitaria</div>
-                            <button id="button2" className="button" onClick={ReclamarComun}>Reclamar</button>
+                            <div className="text-reclamar">Reportar desperfecto en una parte comunitaria</div>
+                            <button className="button-reclamar" onClick={ReclamarComun}>Reclamar</button>
                     </div>
                 </div>
             </div>

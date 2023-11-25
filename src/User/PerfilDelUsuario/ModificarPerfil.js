@@ -48,9 +48,13 @@ function ModificarPerfilComponente(){
     };
 
 
-function irMiPerfil(){
-    navigate('/perfil', {state: {usuario : usuarioModificado}})
-}
+    function irMiPerfil(){
+        navigate('/perfil', {state: {usuario : usuarioModificado}})
+    }
+
+    function cancelarModificacion(){
+        navigate('/perfil', {state : {usuario : usuario}})
+    }
 
     return(
         <div className='Home'>
@@ -68,6 +72,7 @@ function irMiPerfil(){
                     <input className='globo' type="text" placeholder="Constraseña" name="password" id='password' value={usuarioModificado.password} onChange={manejarEntradaUsuarioModificado} />
                     <br></br>
                     <button className='btn-guardar' onClick={() => {modificarPerfil()}}>Guardar Cambios</button>
+                    <button className='btn-cancelar' onClick={() => {cancelarModificacion()}}>Cancelar</button>
                 </div>
             </div>
         </div>

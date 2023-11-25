@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Reclamo.css'
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import NavBarComponente from '../navbar/navbar';
+
+import Dropdown from 'react-bootstrap/Dropdown';
+import { getAllEdificios } from '../../api/getAllEdificios';
 
 
 function ReclamoComunComponente(){
@@ -13,11 +16,15 @@ function ReclamoComunComponente(){
 
     const usuario = location.state && location.state.usuario;
     //const [usuario, setUsuario] = useState({documento:persona.documento});
-    const [edificio, setEdificio] = useState({codigo:'0'});
+
+    const [listaEdificios, setListaEdificios] = useState([]);
+    const [edificioSeleccionado, setEdificioSeleccionado] = useState({});
+
+    //const [edificio, setEdificio] = useState({codigo:'0'});
     //const [unidad, setUnidad] = useState({piso:'', numero:''}); 
     //ver lo de imagenes
     const [reclamo, setReclamo] = useState({documento:usuario.documento, codigoEdificio:'', ubicacion:'', descripcion:'', estado:'nuevo'});
-
+    
 
     //Manejadores de entrada
     
@@ -78,6 +85,41 @@ function ReclamoComunComponente(){
     };
   
 
+    
+  //ingreso minimo y cerrado - edificios
+  const edificios = async () => {
+    try{
+      const respuesta = await getAllEdificios();
+      if (respuesta.ok){
+        //todos los edificios
+        const data = await respuesta.json()
+        console.log(data)
+        setListaEdificios(data)
+      }
+    }
+    catch (error){
+      console.log('Hubo un error al obtener respuesta')
+    }
+  }
+
+
+  useEffect(() => {
+    edificios();
+  }, [])
+
+
+  function manejarEdificioSeleccionado(edificio) {
+    console.log(edificio)
+    // Establecer el edificio seleccionado
+    setEdificioSeleccionado(edificio);
+  
+    // Actualizar el estado de unidad y reclamo con el código del edificio seleccionado
+    const codigoEdificio = edificio.codigo;
+    setReclamo((prevReclamo) => ({ ...prevReclamo, codigoEdificio }));
+
+  }
+
+
     return(
         <div className='PantallaReclamoComun'>
         <NavBarComponente/>
@@ -91,8 +133,19 @@ function ReclamoComunComponente(){
 
         <form onSubmit={enviarFormulario}>
             <input className='input-lectura' type='text' placeholder="Documento" name="documento" id='documento' value={usuario.documento} readOnly/>
-            <input className='globo' type='text' placeholder="Codigo del Edificio" name="codigoEdificio" id='codigoEdificio' value={reclamo.codigoEdificio} onChange={manejarCambioEntradaReclamo} required/>
-            <input className='globo' type='text' placeholder='Ubicacion' name='ubicacion' id='ubicacion' value={reclamo.ubicacion} onChange={manejarCambioEntradaReclamo}  required/>
+            <Dropdown>
+              <Dropdown.Toggle style={{backgroundColor:"#5f3aee", width:"100%", marginTop:"5px", marginBottom:"5px"}} variant="success" id="dropdown-basic">Edificio</Dropdown.Toggle>
+              <Dropdown.Menu style={{width:"100%"}}>
+                {listaEdificios.map((edificio) => (
+                  <Dropdown.Item key={edificio.id}  onClick={() => manejarEdificioSeleccionado(edificio)}>
+                    {edificio.nombre}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            {edificioSeleccionado.nombre != undefined &&(
+              <p>{edificioSeleccionado.nombre}</p>
+            )}            <input className='globo' type='text' placeholder='Ubicacion' name='ubicacion' id='ubicacion' value={reclamo.ubicacion} onChange={manejarCambioEntradaReclamo}  required/>
 
             <textarea className='globo' type='text' placeholder='Descripción' name='descripcion' id='descripcion' value={reclamo.descripcion} maxLength='1000' onChange={manejarCambioEntradaReclamo}  required></textarea>
             <p className='contador-caracteres'>1000 caracteres</p>

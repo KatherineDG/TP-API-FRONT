@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import NavBarComponente from '../navbar/navbar';
 
+import Dropdown from 'react-bootstrap/Dropdown';
+import { getAllEdificios } from '../../api/getAllEdificios';
+
 
 function MiEdificioComponente(){
 
@@ -13,18 +16,22 @@ function MiEdificioComponente(){
     const location = useLocation();
 
     const usuario = location.state && location.state.usuario;
+
+    const [listaEdificios, setListaEdificios] = useState([]);
+    const [edificioSeleccionado, setEdificioSeleccionado] = useState({});
     //const usuario = useState({documento:persona.documento});
-    const [edificio, setEdificio] = useState({codigo:'', nombre:''});
+    //const [edificio, setEdificio] = useState({codigo:'', nombre:''});
     const [nombreEdificio, setNombreEdificio] = useState('');
     const [verificarHabilitacion, setVerificarHabilitacion] = useState('');
 
     const [reclamos, setReclamos] = useState([]);
 
-    const manejarCambioEntradaEdificio = (e) => {
-        const ed = { ...edificio, [e.target.name]: e.target.value };
-        setEdificio(ed);
-    };
+    //const manejarCambioEntradaEdificio = (e) => {
+    //    const ed = { ...edificio, [e.target.name]: e.target.value };
+    //    setEdificio(ed);
+    //};
 
+    /*
     //quiero el nombre del edificio
     const ObtenerNombreEdificio = async () => {
         try {
@@ -44,12 +51,14 @@ function MiEdificioComponente(){
           console.error('Error al obtener el edificio', error);
         }
       };
+      */
 
 //Quiero obtener todos los reclamos del edificio al que es duenio o habita
 const ObtenerReclamos = async () => {
     setVerificarHabilitacion(true)
+    //console.log(edificio)
     try {
-        const respuesta = await fetch(`http://localhost:8080/api/reclamos/edificio/${parseInt(edificio.codigo)}`);
+        const respuesta = await fetch(`http://localhost:8080/api/reclamos/edificio/${edificioSeleccionado.codigo}`);
         const datos = await respuesta.json();
         console.log(datos)
           setReclamos(datos);
@@ -61,7 +70,7 @@ const ObtenerReclamos = async () => {
 const obtenerHabilitadosPorEdificio = async () => {
     setVerificarHabilitacion(null)
     try {
-        const respuesta = await fetch(`http://localhost:8080/api/edificios/${parseInt(edificio.codigo)}/habilitados`)
+        const respuesta = await fetch(`http://localhost:8080/api/edificios/${edificioSeleccionado.codigo}/habilitados`)
         
         if (respuesta.ok){
             const data = await respuesta.json()
@@ -70,7 +79,8 @@ const obtenerHabilitadosPorEdificio = async () => {
             for(const habilitado of data){
                 if(habilitado.documento === usuario.documento){
                     setVerificarHabilitacion(true)
-                    ObtenerNombreEdificio()
+                    ObtenerReclamos()
+                    //ObtenerNombreEdificio()
                     console.log('Este usuario esta habilitado')
                     break;
                 }
@@ -85,6 +95,35 @@ const obtenerHabilitadosPorEdificio = async () => {
         console.log('Error al obtener respuesta')
     }
 }
+
+  
+  //ingreso minimo y cerrado - edificios
+  const edificios = async () => {
+    try{
+      const respuesta = await getAllEdificios();
+      if (respuesta.ok){
+        //todos los edificios
+        const data = await respuesta.json()
+        console.log(data)
+        setListaEdificios(data)
+      }
+    }
+    catch (error){
+      console.log('Hubo un error al obtener respuesta')
+    }
+  }
+
+
+  useEffect(() => {
+    edificios();
+  }, [])
+
+
+  function manejarEdificioSeleccionado(edificio) {
+    console.log(edificio)
+    // Establecer el edificio seleccionado
+    setEdificioSeleccionado(edificio);
+  }
     
     
     return(
@@ -94,7 +133,19 @@ const obtenerHabilitadosPorEdificio = async () => {
         <div className='cuerpo'>
             <div className='contenedor-edificio'>
                 <p>Ingrese el codigo de su edificio del que desea ver los reclamos</p>
-                <input className='casilla' type='text' placeholder="Codigo del Edificio" name="codigo" id='codigo' value={edificio.codigo} onChange={manejarCambioEntradaEdificio} required/>
+                <Dropdown>
+                    <Dropdown.Toggle style={{backgroundColor:"#5f3aee", width:"100%", marginTop:"5px", marginBottom:"5px"}} variant="success" id="dropdown-basic">Edificio</Dropdown.Toggle>
+                    <Dropdown.Menu style={{width:"100%"}}>
+                        {listaEdificios.map((edificio) => (
+                        <Dropdown.Item key={edificio.id}  onClick={() => manejarEdificioSeleccionado(edificio)}>
+                            {edificio.nombre}
+                        </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
+                {edificioSeleccionado.nombre != undefined &&(
+                <p>{edificioSeleccionado.nombre}</p>
+                )}
                 <button className='boton-verificar' type='submit' onClick={() => { obtenerHabilitadosPorEdificio()}}> ver </button>
             </div>
             
@@ -113,7 +164,7 @@ const obtenerHabilitadosPorEdificio = async () => {
             
             {verificarHabilitacion === true && (
                 <div className='tabla-reclamos'>
-                    <h1>{nombreEdificio}</h1><br></br>
+                    <h1>{edificioSeleccionado.nombre}</h1><br></br>
                     {reclamos.length > 0 && (
                         <table border="1">
                             <thead>
