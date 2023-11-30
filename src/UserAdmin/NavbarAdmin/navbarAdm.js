@@ -8,28 +8,28 @@ function NavBarAdminComponente(){
     const navigate = useNavigate();
     const location = useLocation();
 
-    const usuario = location.state && location.state.usuario;
+    const administrador = location.state && location.state.administrador;
 
     //Si toca el boton para Reportar desperfecto en una unidad en particular
     function ReclamarUnidad(){
-        navigate('/reclamo-unidad', { state: { usuario: usuario } });
+        navigate('/reclamo-unidad', { state: { administrador: administrador } });
     }
 
     //Si toca el boton para Reportar desperfecto en una parte comunitaria
     function ReclamarComun(){
-        navigate('/reclamo-comun', { state: { usuario: usuario } });
+        navigate('/reclamo-comun', { state: { administrador: administrador } });
     }
 
     function IrHome(){
-        navigate('/home', { state: { usuario: usuario } });
+        navigate('/home-admin', { state: { administrador: administrador } });
     }
 
     function ListadoEdificios(){
-        navigate('/edificios', { state: { usuario: usuario } });
+        navigate('/edificios', { state: { administrador: administrador } });
       }
 
     function Perfil(){
-        navigate('/perfil', {state : {usuario: usuario}})
+        navigate('/perfil-admin', {state : {administrador: administrador}})
     }
 
     return(
@@ -37,11 +37,11 @@ function NavBarAdminComponente(){
             <header>
                 <nav>
                     <ul>
-                        <li><a href="/home" onClick={IrHome}>Home</a></li>
+                        <li><a href="/home-admin" onClick={IrHome}>Home</a></li>
                         <li><a href='/reclamo-unidad' onClick={ReclamarUnidad}>Reclamar Unidad</a></li>
                         <li><a  href='/reclamo-comun' onClick={ReclamarComun}>Reclamar Sector Comun</a></li>
                         <li><a  href='/edificios' onClick={ListadoEdificios}>Edificios</a></li>
-                        <li><a  href='/perfil'onClick={Perfil}>Perfil</a></li>
+                        <li><a  href='/perfil-admin'onClick={Perfil}>Perfil</a></li>
                         <li><a  href='/login'>Cerrar Sesión</a></li>
                     </ul>
                 </nav>
