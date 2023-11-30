@@ -15,23 +15,35 @@ function LoginAdministradorComponente(){
     //Control para cambiar de pantalla
     const [logeado, setLogeado] = useState(false);
 
+    const [esAdmin, setEsAdmin] = useState(false);
     //Persona
-    const [persona, setPersona] = useState({nombre:'', password:'', documento:''});
+    const [administrador, setAdministrador] = useState({documento:'', nombre:''});
+
+    
+    //Guarda a la persona con sus datos
+    const manejarCambioEntrada = (e) => {
+      setAdministrador({ ...administrador, [e.target.name]: e.target.value });
+  };
+
+  const esperarTresSegundos = () => new Promise(resolve => setTimeout(resolve, 3000));
 
     //Llama al metodo buscarPersona del PerosnaController es de tipo GET
-    const buscarPersona = async () => {
+    const obtenerAdministrador = async () => {
         try {
-          const respuesta = await fetch(`http://localhost:8080/api/personas/buscar?documento=${persona.documento}`);
+          const respuesta = await fetch(`http://localhost:8080/api/administradores`);
       
           if (respuesta.ok) {
-            const personaEncontrada = await respuesta.json();
-            if (personaEncontrada) {
-              console.log('La persona existe');
-              return true;
-            } else {
-              console.log('La persona no existe');
-              return false;
+            const data = await respuesta.json();
+
+            for (const admin of data){
+              if (admin.documento === administrador.documento) {
+                console.log('La persona existe');
+                return true
+                }
             }
+            console.log('Persona no encontrada en el array');
+            return false;
+            
           } else {
             console.log('Respuesta no existosa');
             return false;
@@ -42,11 +54,6 @@ function LoginAdministradorComponente(){
         }
       };
       
-
-    //Guarda a la persona con sus datos
-    const manejarCambioEntrada = (e) => {
-        setPersona({ ...persona, [e.target.name]: e.target.value });
-    };
 
     //Verifica que al menos que se ingresó algo en el "docmuento"
     const verificarInputs = () =>{
@@ -63,16 +70,16 @@ function LoginAdministradorComponente(){
 
     async function IniciarSesion(){
         if (verificarInputs() === true){
-            const resultadoBusqueda = await buscarPersona();
-            console.log(resultadoBusqueda);  // true o false
-            if (resultadoBusqueda === true){
+            const respuestaObtenerAdmin = await obtenerAdministrador();
+            if (respuestaObtenerAdmin === true){
                 alert('Entraste a la plataforma')
+                console.log(administrador)
                 //Permiso para poder ir a la siguiente pantalla
                 setLogeado(true);
-                navigate('/home', { state: { persona: persona } });
+                navigate('/home-admin', { state: { administrador: administrador } });
              }
              else{
-                alert('No existe el usuario. Registrese')
+                alert('No tienes permisos de administrador para entrar en este modo')
              }
         }
         else{
@@ -92,8 +99,9 @@ function LoginAdministradorComponente(){
             <div className='contenedor-datos'>
               <h1 className='bienvenido'>¡Bienvenido/a admin!</h1>
                 <form>
-                  <input className='globo' type="text" placeholder="Documento" name="documento" id='documento' value={persona.documento} onChange={manejarCambioEntrada} required/>
-                  <button className='globo-boton' type='submit' onClick={() => IniciarSesion(persona)}>Iniciar Sesion </button>
+                <input className='globo' type="text" placeholder="Nombre" name="nombre" id='nombre' value={administrador.nombre} onChange={manejarCambioEntrada} required/>
+                  <input className='globo' type="text" placeholder="Documento" name="documento" id='documento' value={administrador.documento} onChange={manejarCambioEntrada} required/>
+                  <button className='globo-boton' type='button' onClick={() => IniciarSesion()}>Iniciar Sesion </button>
                  
                 </form>
                 <img className="imagenRol" src={imagenUsu} alt="ingresar admin" onClick={IngresarUsuario} title="Ingresar Usuario"></img>

@@ -13,6 +13,7 @@ import ModificarPerfilComponente from './User/PerfilDelUsuario/ModificarPerfil';
 import Unidad from './Componentes/Unidad';
 import MisReclamosComponente from './User/ReclamosDelUsuario/misReclamos';
 import LoginAdministradorComponente from './UserAdmin/LoginDeAdmin/LoginAdm';
+import HomeAdmin from './UserAdmin/HomeAdmin/homeAdmin';
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
         <Route exact path='/perfil' element={<PerfilComponente />}/>
         <Route exact path='/modificar-perfil' element={<ModificarPerfilComponente />}/>
 
+        
+        <Route exact path='/home-admin' element={<HomeAdmin/>} />
         <Route exact path='/edificios' element={<Edificios/>} />
         <Route exact path='/edificios/:id' element={<Unidades/>} />
         <Route exact path='/unidad/:id' element={<Unidad/>} />
