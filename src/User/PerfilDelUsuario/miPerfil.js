@@ -4,7 +4,7 @@ import lapiz from '../../recursos/lapizmodificar.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import NavBarComponente from '../navbar/navbar';
+import NavBarComponente from '../Navbar/navbar';
 
 function PerfilComponente(){
 

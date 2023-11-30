@@ -3,7 +3,7 @@ import "./Reclamo.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import NavBarComponente from "../navbar/navbar";
+import NavBarComponente from "../Navbar/navbar";
 import { getAllEdificios } from "../../api/getAllEdificios";
 
 import Dropdown from "react-bootstrap/Dropdown";

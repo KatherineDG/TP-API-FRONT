@@ -3,7 +3,7 @@ import './Home.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import NavBarComponente from '../navbar/navbar';
+import NavBarComponente from '../Navbar/navbar';
 
 function HomeComponente(){
 
@@ -45,7 +45,7 @@ function HomeComponente(){
                         <button className="button-reclamar" onClick={ReclamarUnidad}>Reclamar</button>
                     </div>
 
-                    <div className="text-button-container">
+                    <div className="contenedor-botones">
                             <div className="text-reclamar">Reportar desperfecto en una parte comunitaria</div>
                             <button className="button-reclamar" onClick={ReclamarComun}>Reclamar</button>
                     </div>

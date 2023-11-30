@@ -4,7 +4,7 @@ import './MiEdificio.css';
 import imagenOOPS from '../../recursos/oops.png';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import NavBarComponente from '../navbar/navbar';
+import NavBarComponente from '../Navbar/navbar';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getAllEdificios } from '../../api/getAllEdificios';

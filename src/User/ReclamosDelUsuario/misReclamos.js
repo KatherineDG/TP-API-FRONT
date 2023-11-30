@@ -4,7 +4,7 @@ import './misReclamos.css';
 import imagenOOPS from '../../recursos/oops.png';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import NavBarComponente from '../navbar/navbar';
+import NavBarComponente from '../Navbar/navbar';
 
 
 function MisReclamosComponente(){

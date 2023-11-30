@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import NavBarAdminComponente from '../UserAdmin/NavbarAdmin/navbarAdm';
 
 function Unidades(){
 
@@ -81,6 +82,7 @@ function Unidades(){
     
     return(
         <section className="vh-100">
+            <NavBarAdminComponente/>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                 <div className="col col-lg-12 col-xl-7">

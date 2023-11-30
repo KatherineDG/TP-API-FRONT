@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from 'react';
-import NavBarAdminComponente from '../UserAdmin/navbar/navbar';
+import NavBarAdminComponente from '../UserAdmin/NavbarAdmin/navbarAdm';
 
 function Edificios(){
 

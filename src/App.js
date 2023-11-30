@@ -2,7 +2,6 @@ import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 import LoginComponente from './User/LoginDeUsuario/Login';
-import LoginAdministradorComponente from './LoginAdm';
 import ReclamoComponente from './User/FormulariosDeReclamo/Reclamo';
 import HomeComponente from './User/InicioDeUsuario/Home';
 import ReclamoComunComponente from './User/FormulariosDeReclamo/ReclamoComun';
@@ -13,6 +12,7 @@ import PerfilComponente from './User/PerfilDelUsuario/miPerfil';
 import ModificarPerfilComponente from './User/PerfilDelUsuario/ModificarPerfil';
 import Unidad from './Componentes/Unidad';
 import MisReclamosComponente from './User/ReclamosDelUsuario/misReclamos';
+import LoginAdministradorComponente from './UserAdmin/LoginDeAdmin/LoginAdm';
 
 
 function App() {

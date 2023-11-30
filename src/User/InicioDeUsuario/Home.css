@@ -45,6 +45,6 @@ body {
     color:beige;
 }
 
-.text-button-container + .text-button-container {
+.contenedor-botones + .contenedor-botones {
     margin-left: 20%;
 }

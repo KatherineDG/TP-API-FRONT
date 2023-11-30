@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import imagenUsu from './recursos/usu.png';
+import imagenUsu from '../../recursos/usu.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -92,8 +92,6 @@ function LoginAdministradorComponente(){
             <div className='contenedor-datos'>
               <h1 className='bienvenido'>¡Bienvenido/a admin!</h1>
                 <form>
-                  <input className='globo' type="text" placeholder="Nombre" name="nombre" id='nombre' value={persona.nombre} onChange={manejarCambioEntrada} required/>
-                  <input className='globo' type="password" placeholder="Contraseña" name="password" id='password' value={persona.password} onChange={manejarCambioEntrada} required/>
                   <input className='globo' type="text" placeholder="Documento" name="documento" id='documento' value={persona.documento} onChange={manejarCambioEntrada} required/>
                   <button className='globo-boton' type='submit' onClick={() => IniciarSesion(persona)}>Iniciar Sesion </button>
                  
