@@ -1,8 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from 'react';
 import NavBarAdminComponente from '../UserAdmin/NavbarAdmin/navbarAdm';
+//para el modal
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 function Edificios(){
+
+    //edificio que se va  modificar
+    const [edificioEsModificado, setEdificioEsModificado] = useState({codigo:'', nombre:'', direccion:''})
+    //edificio con los cambios
+    const [edificioModificado, setEdificioModificado] = useState({codigo:'', nombre:'', direccion:''})
 
     const [edificios, setEdificios] = useState([]);
     useEffect(() => {
@@ -54,6 +62,45 @@ function Edificios(){
 
     }
 
+    const [show, setShow] = useState(false);
+    const handleOnlyClose = () => (setShow(false))
+    const handleClose = () => {
+        setShow(false)
+        editarBoton(edificioEsModificado.codigo)    
+    };
+    const handleShow = (ed) => {
+        setShow(true)
+        //console.log(ed)
+        setEdificioEsModificado({
+            codigo: ed.codigo,
+            nombre: ed.nombre,
+            direccion: ed.direccion
+        })
+    }
+
+    const editarBoton = (id) => {
+        //e.preventDefault();
+        //console.log('entro', edificioModificado)
+        const url = `http://localhost:8080/api/edificios/${id}`;
+        fetch(url, {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                codigo: edificioEsModificado.codigo,
+                nombre: edificioModificado.nombre,
+                direccion: edificioModificado.direccion
+            })
+        }
+        ).then( () => {
+            alert("Edificio Modificado");
+            window.location.reload();
+        })
+    }
+
+    const manejoDatosEdificioModificado = (e) => {
+        setEdificioModificado({...edificioModificado, [e.target.name]: e.target.value})
+    }
+
     const unidadesBoton = (e, id) => {
         e.preventDefault();
         window.location.href = "/edificios/" + id;
@@ -89,11 +136,51 @@ function Edificios(){
                                     <td>{edificio.direccion}</td>
                                     <td>
                                         <button type="submit" className="btn btn-danger" onClick={ (e) => eliminarBoton(e, edificio.codigo) }>Elim.</button>
-                                        <button type="submit" className="btn btn-success ms-1">Editar</button>
+                                        <Button variant="warning" onClick={(e) => handleShow(edificio)}>Editar</Button>
                                         <button type="submit" className="btn btn btn-primary ms-1" onClick={ (e) => unidadesBoton(e, edificio.codigo) }>Ver unidades</button>
                                     </td>
                                 </tr>
                             ))}
+
+                           
+                                <Modal show={show}>
+                                        <Modal.Body>
+                                            <div>
+                                                <table className="table mb-4">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">No.</th>
+                                                            <th scope="col">Nombre</th>
+                                                            <th scope="col">Dirección</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{edificioEsModificado.codigo}</td>
+                                                            <td>{edificioEsModificado.nombre}</td>
+                                                            <td>{edificioEsModificado.direccion}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="text" className="form-control" id="codigo" name="codigo" placeholder="Codigo" aria-label="Codigo" aria-describedby="basic-addon2" value={edificioEsModificado.codigo} readOnly/></td>
+                                                            <td><input type="text" className="form-control" id="nombre" name="nombre" placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon2" value={edificioModificado.nombre} onChange={manejoDatosEdificioModificado}/></td>
+                                                            <td><input type="text" className="form-control" id="direccion" name="direccion" placeholder="Dirección" aria-label="Dirección" aria-describedby="basic-addon2" value={edificioModificado.direccion} onChange={manejoDatosEdificioModificado}/></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleOnlyClose}>
+                                            Cancelar
+                                        </Button>
+                                        <Button variant="success" onClick={handleClose}>
+                                            Guardar Cambios
+                                        </Button>
+                                        </Modal.Footer>
+                                    </Modal>
+                            
+                            
 
                             <tr>        
                                     <th scope="row">#</th>
