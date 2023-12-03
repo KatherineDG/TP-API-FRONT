@@ -18,6 +18,11 @@ function ReclamoComponente() {
 
   const [listaEdificios, setListaEdificios] = useState([]);
   const [edificioSeleccionado, setEdificioSeleccionado] = useState({});
+  const [seleccionoEdificio, setSeleccionoEdificio] = useState(false)
+
+  const [listaUnidades, setListaUnidades] = useState([])
+  const [unidadSeleccionada, setUnidadSeleccionada] = useState({})
+
 
   const [unidad, setUnidad] = useState({
     piso: "",
@@ -106,7 +111,7 @@ function ReclamoComponente() {
       if (respuesta.ok) {
         //todos los edificios
         const data = await respuesta.json();
-        console.log(data);
+        //console.log(data);
         setListaEdificios(data);
       }
     } catch (error) {
@@ -122,6 +127,7 @@ function ReclamoComponente() {
     //console.log(edificio);
     // Establecer el edificio seleccionado
     setEdificioSeleccionado(edificio);
+    setSeleccionoEdificio(true)
 
     // Actualizar el estado de unidad y reclamo con el código del edificio seleccionado
     const codigoEdificio = edificio.codigo;
@@ -133,6 +139,55 @@ function ReclamoComponente() {
       unidad: { ...prevReclamo.unidad, codigoEdificio: codigoEdificio },
     }));
   }
+
+
+
+   //ingreso minimo y cerrado - unidades
+   const unidades = async () => {
+    try {
+      const respuesta = await fetch(`http://localhost:8080/api/edificios/${edificioSeleccionado.codigo}/unidades`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      if (respuesta.ok) {
+        //todas las unidades
+        const data = await respuesta.json();
+        console.log(data);
+        if(data.length === 0){
+          alert("Este edificio no tiene unidades")
+        }
+        else{
+          setListaUnidades(data);
+        }
+      }
+    } catch (error) {
+      console.log("Hubo un error al obtener respuesta");
+    }
+  };
+
+  function manejarUnidadSeleccionada(unidad) {
+    //console.log(edificio);
+    // Establecer el edificio seleccionado
+    setUnidadSeleccionada(unidad);
+
+    // Actualizar el estado de unidad y reclamo con el código del edificio seleccionado
+    const pisoUnidad = unidad.piso;
+    const numeroUnidad = unidad.numero
+    setUnidad((prevUnidad) => ({ ...prevUnidad, pisoUnidad }));
+    setUnidad((prevUnidad) => ({ ...prevUnidad, numeroUnidad }));
+
+    setReclamo((prevReclamo) => ({
+      ...prevReclamo,
+      unidad: { ...prevReclamo.unidad, piso: pisoUnidad },
+    }));
+    setReclamo((prevReclamo) => ({
+      ...prevReclamo,
+      unidad: { ...prevReclamo.unidad, numero: numeroUnidad },
+    }));
+  }
+
 
   return (
     <div className="PantallaReclamo">
@@ -159,24 +214,12 @@ function ReclamoComponente() {
             />
 
             <Dropdown>
-              <Dropdown.Toggle
-                style={{
-                  backgroundColor: "#5f3aee",
-                  width: "100%",
-                  marginTop: "5px",
-                  marginBottom: "5px",
-                }}
-                variant="success"
-                id="dropdown-basic"
-              >
+              <Dropdown.Toggle style={{backgroundColor: "#5f3aee", width: "100%", marginTop: "5px", marginBottom: "5px",}} variant="success" id="dropdown-basic">
                 Edificio
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ width: "100%" }}>
                 {listaEdificios.map((edificio) => (
-                  <Dropdown.Item
-                    key={edificio.id}
-                    onClick={() => manejarEdificioSeleccionado(edificio)}
-                  >
+                  <Dropdown.Item key={edificio.id} onClick={() => manejarEdificioSeleccionado(edificio)}>
                     {edificio.nombre}
                   </Dropdown.Item>
                 ))}
@@ -186,100 +229,62 @@ function ReclamoComponente() {
               <p>{edificioSeleccionado.nombre}</p>
             )}
 
-            <input
-              className="globo"
-              type="text"
-              placeholder="Ubicacion"
-              name="ubicacion"
-              id="ubicacion"
-              value={reclamo.ubicacion}
-              onChange={manejarCambioEntradaReclamo}
-              required
-            />
+            {seleccionoEdificio == true && (
+              <div><button style={{backgroundColor:'grey', color:'white', borderRadius:'10px'}} onClick={() => unidades()}>obtener unidades de este edificio</button></div>
+            )}
 
-            <input
-              className="globo"
-              type="text"
-              placeholder="Piso"
-              name="piso"
-              id="piso"
-              value={unidad.piso}
-              onChange={manejarCambioEntradaUnidad}
-              required
-            />
-            <input
-              className="globo"
-              type="text"
-              placeholder="Número"
-              name="numero"
-              id="numero"
-              value={unidad.numero}
-              onChange={manejarCambioEntradaUnidad}
-              required
-            />
+            {listaUnidades.length != 0 && (
+                    <Dropdown>
+                    <Dropdown.Toggle style={{backgroundColor: "#5f3aee", width: "100%", marginTop: "5px", marginBottom: "5px",}} variant="success" id="dropdown-basic">
+                      Unidad
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{ width: "100%", maxHeight: "250px", overflowY: "auto" }}>
+                      {listaUnidades.map((unidad) => (
+                        <Dropdown.Item key={unidad.id} onClick={() => manejarUnidadSeleccionada(unidad)}>
+                          <table style={{width:'100%', textAlign:'center', borderCollapse:'collapse'}}>
+                            <thead>
+                              <tr>
+                                <th>Piso: {unidad.piso}</th>
+                                <th>Nro: {unidad.numero}</th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+            )}
+            {unidadSeleccionada.piso != undefined && (
+              <table style={{width:'100%', textAlign:'center', borderCollapse:'collapse'}}>
+              <thead>
+                <tr>
+                  <th>Piso: {unidadSeleccionada.piso}</th>
+                  <th>Nro: {unidadSeleccionada.numero}</th>
+                </tr>
+              </thead>
+            </table>
+            )}
+            
 
-            <textarea
-              className="globo"
-              type="text"
-              placeholder="Descripción"
-              name="descripcion"
-              id="descripcion"
-              value={reclamo.descripcion}
-              maxLength="1000"
-              onChange={manejarCambioEntradaReclamo}
-              required
-            ></textarea>
+            <input className="globo" type="text" placeholder="Ubicacion" name="ubicacion" id="ubicacion" value={reclamo.ubicacion} onChange={manejarCambioEntradaReclamo} required />
+
+            <textarea className="globo" type="text" placeholder="Descripción" name="descripcion" id="descripcion" value={reclamo.descripcion} maxLength="1000" onChange={manejarCambioEntradaReclamo} required></textarea>
             <p className="contador-caracteres">1000 caracteres</p>
 
-            <input
-              type="file"
-              id="imagenes"
-              name="imagenes"
-              multiple
-              onChange={mostrarImagenes}
-            />
+            <input type="file" id="imagenes" name="imagenes" multiple onChange={mostrarImagenes}/>
             <div id="contenedor-imagenes">
               {imagenes.map((imagen, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <img
-                    src={URL.createObjectURL(imagen)}
-                    style={{
-                      width: "100px",
-                      marginLeft: "50px",
-                      marginTop: "20px",
-                    }}
-                    alt={`Imagen ${index}`}
-                  />
-                  <button
-                    style={{
-                      width: "100px",
-                      marginLeft: "50px",
-                      marginTop: "20px",
-                    }}
-                    onClick={() => eliminarImagen(index)}
-                  >
+                <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px"}}>
+                  <img src={URL.createObjectURL(imagen)} style={{ width: "100px", marginLeft: "50px", marginTop:"20px",}} alt={`Imagen ${index}`}/>
+                  <button style={{ width: "100px", marginLeft: "50px", marginTop: "20px"}} onClick={() => eliminarImagen(index)}>
                     Eliminar
                   </button>
                 </div>
               ))}
             </div>
 
-            <button
-              className="globo-boton"
-              type="submit"
-              onClick={() => {
-                agregarReclamo(reclamo);
-              }}
-            >
-              {" "}
-              Enviar Reclamo{" "}
+            <button className="globo-boton" type="submit" onClick={() => { agregarReclamo(reclamo); }}>
+              {" "}Enviar Reclamo{" "}
             </button>
           </form>
         </div>
