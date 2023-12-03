@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import './navbarAdm.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+
 
 function NavBarAdminComponente(){
 
@@ -32,17 +34,29 @@ function NavBarAdminComponente(){
         navigate('/perfil-admin', {state : {administrador: administrador}})
     }
 
+    function CerrarSesion(){
+        navigate('/login')
+    }
+
+    function desplegarMenu(){
+        var navList = document.querySelector(".nav-list");
+        navList.classList.toggle("active");
+    }
+
     return(
-        <div className='Home'>
+        <div>
             <header>
-                <nav>
-                    <ul>
-                        <li><a href="/home-admin" onClick={IrHome}>Home</a></li>
-                        <li><a href='/reclamo-unidad' onClick={ReclamarUnidad}>Reclamar Unidad</a></li>
-                        <li><a  href='/reclamo-comun' onClick={ReclamarComun}>Reclamar Sector Comun</a></li>
-                        <li><a  href='/edificios' onClick={ListadoEdificios}>Edificios</a></li>
-                        <li><a  href='/perfil-admin'onClick={Perfil}>Perfil</a></li>
-                        <li><a  href='/login'>Cerrar Sesión</a></li>
+                <nav className='barra-nav'>
+                    <div className="menu-toggle" id="mobile-menu" onClick={desplegarMenu}>
+                        ☰
+                    </div>
+                    <ul className="nav-list">
+                        <li onClick={IrHome}><p className='item-navbar'>Home</p></li>
+                        <li  onClick={ReclamarUnidad}><p className='item-navbar'>Reclamar Unidad</p></li>
+                        <li onClick={ReclamarComun}><p className='item-navbar'>Reclamar Sector Comun</p></li>
+                        <li onClick={ListadoEdificios}><p className='item-navbar'>Edificios</p></li>
+                        <li onClick={Perfil}><p className='item-navbar'>Perfil</p></li>
+                        <li onClick={CerrarSesion}><p className='item-navbar'>Cerrar Sesion</p></li>
                     </ul>
                 </nav>
             </header>

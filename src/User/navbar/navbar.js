@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './navbar.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -36,19 +37,31 @@ function NavBarComponente(){
         navigate('/perfil', {state : {usuario: usuario}})
     }
 
+    function CerrarSesion(){
+        navigate('/login')
+    }
+
+    function desplegarMenu(){
+        var navList = document.querySelector(".nav-list");
+        navList.classList.toggle("active");
+    }
+
 
     return(
-        <div className='Home'>
+        <div>
             <header>
-                <nav>
-                    <ul>
-                        <li><a href="/home" onClick={IrHome}>Home</a></li>
-                        <li><a href='/reclamo-unidad' onClick={ReclamarUnidad}>Reclamar Unidad</a></li>
-                        <li><a  href='/reclamo-comun' onClick={ReclamarComun}>Reclamar Sector Comun</a></li>
-                        <li><a  href='/mi-edificio'onClick={MiEdificio}>Mi Edificio</a></li>
-                        <li><a href='/mis-reclamos' onClick={MisReclamos}>Mis Reclamos</a></li>
-                        <li><a  href='/perfil'onClick={Perfil}>Perfil</a></li>
-                        <li><a  href='/login'>Cerrar Sesión</a></li>
+                <nav className='barra-nav'>
+                    <div className="menu-toggle" id="mobile-menu" onClick={desplegarMenu}>
+                        ☰
+                    </div>
+                    <ul className="nav-list">
+                        <li onClick={IrHome}><p className='item-navbar'>Home</p></li>
+                        <li  onClick={ReclamarUnidad}><p className='item-navbar'>Reclamar Unidad</p></li>
+                        <li onClick={ReclamarComun}><p className='item-navbar'>Reclamar Sector Comun</p></li>
+                        <li onClick={MiEdificio}><p className='item-navbar'>Mi Edificio</p></li>
+                        <li onClick={MisReclamos}><p className='item-navbar'>Mis Reclamos</p></li>
+                        <li onClick={Perfil}><p className='item-navbar'>Perfil</p></li>
+                        <li onClick={CerrarSesion}><p className='item-navbar'>Cerrar Sesion</p></li>
                     </ul>
                 </nav>
             </header>

@@ -8,42 +8,7 @@
   }
 
 
-  /*barra de navegacion*/
 
-  nav {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-  }
-  
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  li {
-    display: inline;
-    margin-right: 20px;
-  }
-  
-  a {
-    background-color: #366472;
-    text-decoration: none;
-    color: #ffffff;
-    padding: 5px;
-    border-radius: 2px;
-    
-  }
-  
-  a:hover {
-    text-decoration: none;
-    background-color: #427d8f;
-    color: #ffffff;
-  }
   
 
 
